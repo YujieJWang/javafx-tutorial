@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.util.Collections;
 
+import johnny.command.Command;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -44,15 +46,42 @@ public class DialogBox extends HBox {
         Collections.reverse(tmp);
         getChildren().setAll(tmp);
         setAlignment(Pos.TOP_LEFT);
+        dialog.getStyleClass().add("reply-label");
     }
 
     public static DialogBox getUserDialog(String text, Image img) {
         return new DialogBox(text, img);
     }
 
+    private void changeDialogStyle(Command commandType) {
+        switch (commandType) {
+        case TODO:
+        case DEADLINE:
+        case EVENT:
+            dialog.getStyleClass().add("add-label");
+            break;
+        case MARK:
+        case UNMARK:
+            dialog.getStyleClass().add("marked-label");
+            break;
+        case DELETE:
+            dialog.getStyleClass().add("delete-label");
+            break;
+        default:
+            break;
+        }
+    }
+
     public static DialogBox getDukeDialog(String text, Image img) {
         var db = new DialogBox(text, img);
         db.flip();
+        return db;
+    }
+
+    public static DialogBox getDukeDialog(String text, Image img, Command commandType) {
+        var db = new DialogBox(text, img);
+        db.flip();
+        db.changeDialogStyle(commandType);
         return db;
     }
 }
